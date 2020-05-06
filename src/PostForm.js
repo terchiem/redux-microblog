@@ -27,13 +27,9 @@ function PostForm({ id, formData = INITIAL_STATE, toggleEditMode, submitData }) 
 
   function handleSubmit(evt) {
     evt.preventDefault();
-
-    const newPost = {
-      ...form,
-      id: id || uuid()
-    }
-    
-    submitData(newPost);
+    newPostId = id | uuid();
+    // convert to use action creator/dispatch
+    submitData(form, newPostId);
     // if we are editing a post take us back to that post,
     // otherwise redirect to home
     id ? toggleEditMode() : history.push('/');
