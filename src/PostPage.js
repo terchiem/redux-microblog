@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 
-import EditPostForm from './EditPostForm';
+import PostForm from './PostForm';
 
 
 /** Displays information about a post and provides a way to edit and delete it
@@ -12,7 +12,7 @@ import EditPostForm from './EditPostForm';
  *    deletePost -> state setter from App component
  * 
  * State:
- *    editMode -> toggles the display of the EditPostForm component
+ *    editMode -> toggles the display of the PostForm component
 */
 
 function PostPage({ posts, editPost, deletePost }) {
@@ -26,11 +26,11 @@ function PostPage({ posts, editPost, deletePost }) {
   const { title, description, body } = post;
 
   const postBody = editMode 
-    ? <EditPostForm 
+    ? <PostForm 
         id={id} 
-        postData={post} 
+        formData={post} 
         toggleEditMode={toggleEditMode} 
-        editPost={editPost} 
+        submitData={editPost} 
       /> 
     : (<div>
         <h3>{title}</h3>

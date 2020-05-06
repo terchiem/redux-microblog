@@ -1,27 +1,42 @@
 import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 
-/** Displays a form to edit a post
+/** Displays a form to create a new post
  * 
  * Props:
- *    id -> post id
- *    postData -> post data to populate the form
+ *    submitData -> parent state setter function
+ *    id -> post id (if editing post)
+ *    formData -> form data to populate the form (if editing post)
  *    toggleEditMode -> PostPage state setter function to toggle edit form
- *    editPost -> App state setter to edit a post
  * 
  * State:
  *    form -> input data
  */
 
+const INITIAL_STATE = {
+  title: "",
+  description: "",
+  body: ""
+}
 
-function EditPostForm({ id, postData, toggleEditMode, editPost }) {
+function PostForm({ id, formData = INITIAL_STATE, toggleEditMode, submitData }) {
 
-  const [form, setForm] = useState(postData);
+  const history = useHistory();
+  const [form, setForm] = useState(formData);
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    const editedPost = {id, ...form}
-    editPost(editedPost);
-    toggleEditMode();
+
+    const newPost = {
+      ...form,
+      id: id || uuid()
+    }
+    
+    submitData(newPost);
+    // if we are editing a post take us back to that post,
+    // otherwise redirect to home
+    id ? toggleEditMode() : history.push('/');
   }
 
   function handleChange(evt) {
@@ -68,9 +83,12 @@ function EditPostForm({ id, postData, toggleEditMode, editPost }) {
       </p>
 
       <button>Save</button>
-      <button onClick={toggleEditMode}>Cancel</button>
+      {id
+        ? <button onClick={toggleEditMode}>Cancel</button>
+        : <Link to="/">Cancel</Link>
+      }
     </form>
   )
 }
 
-export default EditPostForm;
+export default PostForm;

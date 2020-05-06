@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import PostList from './PostList';
 import PostPage from './PostPage';
-import NewPostForm from './NewPostForm';
+import PostForm from './PostForm';
 
 /** Main routes for Microblog App 
  * 
@@ -24,7 +24,7 @@ function Routes({ posts, addPost, editPost, deletePost }) {
       </Route>
 
       <Route exact path="/new">
-        <NewPostForm addPost={addPost} />
+        <PostForm submitData={addPost} />
       </Route>
 
       <Route path="/:id">
