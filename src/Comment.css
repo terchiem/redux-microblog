@@ -1,0 +1,9 @@
+.comment {
+  margin: 8px 0;
+  text-align: left;
+}
+
+.commentDelete {
+  margin-right: 8px;
+  color: maroon;
+}

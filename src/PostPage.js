@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 
 import PostForm from './PostForm';
+import CommentList from './CommentList';
 
 
 /** Displays information about a post and provides a way to edit and delete it
@@ -15,7 +16,7 @@ import PostForm from './PostForm';
  *    editMode -> toggles the display of the PostForm component
 */
 
-function PostPage({ posts, editPost, deletePost }) {
+function PostPage({ posts, editPost, deletePost, addComment, deleteComment }) {
 
   const { id } = useParams();
   const [editMode, setEditMode] = useState(false);
@@ -23,7 +24,7 @@ function PostPage({ posts, editPost, deletePost }) {
   const post = posts.find(p => p.id === id);
   if (!post) return <Redirect to="/" />;
 
-  const { title, description, body } = post;
+  const { title, description, body, comments } = post;
 
   const postBody = editMode 
     ? <PostForm 
@@ -49,9 +50,9 @@ function PostPage({ posts, editPost, deletePost }) {
         <button onClick={toggleEditMode}>Edit</button>
         <button onClick={() => deletePost(id)}>Delete</button>
       </div>
-
       {postBody}
-
+      <hr />
+      <CommentList postId={id} comments={comments} addComment={addComment} deleteComment={deleteComment} />
     </div>
   )
 }

@@ -11,7 +11,16 @@ const TEST_POSTS = [
     title: "test post 1",
     description: "test description 1",
     body: "test body 1",
-    comments: [],
+    comments: [
+      {
+        message: "this is a comment",
+        id: 1
+      },
+      {
+        message: "another comment here!",
+        id: 2
+      }
+    ],
     votes: 0
   },
   {
@@ -48,13 +57,52 @@ function App() {
   function deletePost(id) {
     setPosts(posts => posts.filter(p => p.id !== id));
   }
+
+  function addComment(postId, newComment) {
+    setPosts(posts => {
+      const editedPost = posts.find(post => post.id === postId);
+      const oldPosts = posts.filter(p => p.id !== editedPost.id);
+      return [
+        ...oldPosts,
+        {
+          ...editedPost,
+          comments: [
+            ...editedPost.comments,
+            newComment
+          ]
+        }
+      ]
+    })
+  }
+
+  function deleteComment(postId, commentId) {
+    setPosts(posts => {
+      const editedPost = posts.find(post => post.id === postId);
+      const editedComments = editedPost.comments.filter(c => c.id !== commentId);
+      return [
+        ...posts.filter(p => p.id !== postId),
+        {
+          ...editedPost,
+          comments: editedComments
+        }
+      ]
+    });
+    
+  }
   
 
   return (
     <div className="App">
       <BrowserRouter>
         <Header />
-        <Routes posts={posts} addPost={addPost} editPost={editPost} deletePost={deletePost} />
+        <Routes
+          posts={posts}
+          addPost={addPost}
+          editPost={editPost}
+          deletePost={deletePost}
+          addComment={addComment}
+          deleteComment={deleteComment}
+        />
       </BrowserRouter>
     </div>
   );
@@ -74,7 +122,7 @@ post: {
   votes:
 }
 
-comments: {
+comment: {
   id:
   message:
 }
@@ -93,9 +141,9 @@ APP
     PostListItem
 
   PostPage
-
-  CommentList
-    Comment
+    CommentList
+      Comment
+      CommentForm
 
 
 
