@@ -1,0 +1,9 @@
+.Header {
+  background-color: #eee;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.Header a {
+  margin-left: 30px;
+}
