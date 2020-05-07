@@ -1,32 +1,21 @@
 import {
+  GET_TITLES,
+  GET_POST,
   ADD_POST,
   EDIT_POST,
   DELETE_POST,
+  GET_COMMENT,
   ADD_COMMENT,
   DELETE_COMMENT
 } from './actionTypes';
 
 const INITIAL_STATE = { 
-  1: {
-    title: "test post 1",
-    description: "test description 1",
-    body: "test body 1",
-    votes: 0,
-    comments: {
-      1: "this is a comment",
-      2: "another comment here!"
-      }
+  posts: {
+
   },
-  2: {
-    title: "test post 2",
-    description: "test description 2",
-    body: "test body 2",
-    votes: 0,
-    comments: {
-      1: "this is a comment",
-      2: "another comment here!"
-    }
-  }
+  titles: [
+
+  ]
 }
   
 /*
@@ -37,33 +26,69 @@ const INITIAL_STATE = {
    title: { id,title,description,votes received from backend }
  }
 
-
- - adding a new post will add it into titles
- - removing a post will remove it from titles
- - editing a post will edit it from titles
+   - ADDING NEW POST
+      - add a comments array
+      - add to posts
+      - add smaller data set to titles
+  - REMOVING A POST
+      - remove from posts
+      - remove from titles
+  - EDITING A POST
+      - edit post in-place
+      - edit titles in-place
  - adding/removing a comment will update the post in posts
 */
 
 function rootReducer(state = INITIAL_STATE, action) {
-  const post = state[action.postId];
+  const post = state[action.post];
   
   switch (action.type) {
+    case GET_TITLES:
+      return {
+        ...state,
+        titles: action.titles
+      };
+
+    case GET_POST:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [action.post.id]: action.post 
+        }
+      };
+
     case ADD_POST:
       return {
         ...state,
-        [action.postId]: action.post
+        posts: {
+          ...state.posts,
+          [action.post.id]: action.post
+        }
       }
 
     case EDIT_POST:
       return {
         ...state,
-        [action.postId]: {...post, ...action.post}
+        posts: {
+          ...state.posts,
+          [action.post.id]: {
+            ...state.posts[action.post.id],
+            ...action.post
+        }
       }
+    }
+
+    // TERRY! START EDITING REDUCER HERE
 
     case DELETE_POST:
       const postsCopy = { ...state };
       delete postsCopy[action.postId];
       return postsCopy;
+
+    case GET_COMMENT:
+      return ;
+
 
     case ADD_COMMENT:
 

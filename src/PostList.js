@@ -12,7 +12,7 @@ import PostListItem from './PostListItem';
 
 function PostList() {
 
-  const posts = useSelector(st => st);
+  const posts = useSelector(st => st.titles);
 
   function renderPostListItems() {
     return Object.keys(posts).map(id => {

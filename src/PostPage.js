@@ -23,7 +23,7 @@ function PostPage() {
 
   const dispatch = useDispatch();
   const { id } = useParams();
-  const posts = useSelector(st => st);
+  const posts = useSelector(st => st.posts);
   const [editMode, setEditMode] = useState(false);
 
   // redirect to home if post not found
