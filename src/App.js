@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 
@@ -7,7 +7,6 @@ import Routes from './Routes';
 
 /** Microblog app, allows a user to create and comment on a collection of posts */
 function App() {
-
   return (
     <div className="App">
       <BrowserRouter>

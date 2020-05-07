@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addPost, editPost } from './actions';
-import { v4 as uuid } from 'uuid';
+import { addPostAPI, editPostAPI } from './actions';
 
 /** Displays a form to create a new post
  * 
@@ -35,16 +34,10 @@ function PostForm({ id, formData = INITIAL_STATE, toggleEditMode }) {
 
     // if we are editing, we have an existing id
     if (id) {
-      dispatch(editPost(form, id));
+      dispatch(editPostAPI(form));
       toggleEditMode();
     } else {
-      const newPost = {
-        ...form,
-        comments: {},
-        votes: 0
-      }
-      const newId = uuid();
-      dispatch(addPost(newPost, newId));
+      dispatch(addPostAPI(form));
       history.push('/');
     }
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { addComment, deleteComment } from './actions';
+import { createCommentAPI, deleteCommentAPI } from './actions';
 
 import CommentForm from './CommentForm';
 import Comment from './Comment';
@@ -21,18 +21,17 @@ function CommentList({ postId, comments }) {
   const dispatch = useDispatch();
 
   function removeComment(commentId) {
-    dispatch(deleteComment(postId, commentId));
+    dispatch(deleteCommentAPI(postId, commentId));
   }
 
-  function addNewComment(commentId, newComment) {
-    dispatch(addComment(postId, commentId, newComment));
+  function addNewComment(newComment) {
+    dispatch(createCommentAPI(postId, newComment));
   }
 
   function renderComments() {
-    return Object.keys(comments).map(id => {
-      const message = comments[id];
-      return <Comment message={message} removeComment={removeComment} id={id} key={id} />
-    });
+    return comments.map(c => (
+      <Comment message={c.text} removeComment={removeComment} id={c.id} key={c.id} />
+    ));
   }
 
   return (

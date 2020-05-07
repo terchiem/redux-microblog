@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { deletePost } from './actions';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { getPostAPI, deletePostAPI, startLoad, endLoad } from './actions';
 
 import PostForm from './PostForm';
 import CommentList from './CommentList';
@@ -23,10 +23,30 @@ function PostPage() {
 
   const dispatch = useDispatch();
   const { id } = useParams();
-  const posts = useSelector(st => st.posts);
+  const posts = useSelector(st => st.posts, shallowEqual);
+  const isLoading = useSelector(st => st.isLoading);
   const [editMode, setEditMode] = useState(false);
 
-  // redirect to home if post not found
+
+  useEffect(() => {
+    dispatch(startLoad());
+    dispatch(getPostAPI(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (posts[id]) {
+      dispatch(endLoad());
+    }
+  }, [posts])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  /*****************************************************************************************
+  * 		TODO: Think about loading and redirecting when visiting a post			
+  *****************************************************************************************/
+
   const post = posts[id];
   if (!post) { return <Redirect to="/" />; }
 
@@ -52,7 +72,7 @@ function PostPage() {
     <div className="PostPage">
       <div>
         <button onClick={toggleEditMode}>Edit</button>
-        <button onClick={() => dispatch(deletePost(id))}>Delete</button>
+        <button onClick={() => dispatch(deletePostAPI(id))}>Delete</button>
       </div>
       {postBody}
       <hr />

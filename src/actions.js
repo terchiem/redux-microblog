@@ -6,7 +6,9 @@ import {
   DELETE_POST,
   GET_COMMENTS,
   ADD_COMMENT,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  START_LOAD,
+  END_LOAD
 } from './actionTypes';
 import MicroBlogAPI from './MicroblogAPI';
 
@@ -26,10 +28,14 @@ function getTitles(titles) {
 }
 
 // Get Single Post Thunk
-export function getPostAPI() {
+export function getPostAPI(postId) {
   return async function(dispatch) {
-    let post = await MicroBlogAPI.getPost();
-    dispatch(getPost(post));
+    try {
+      let post = await MicroBlogAPI.getPost(postId);
+      dispatch(getPost(post));
+    } catch (err) {
+      console.log(err);
+    }
   };
 }
 
@@ -83,23 +89,24 @@ function deletePost(postId) {
   }
 }
 
-// Get Comments Thunk
+// Get Comments Thunk (not used)
 export function getCommentsAPI(postId) {
   return async function(dispatch) {
-    let comments = await MicroBlogAPI.getComments(postId));
-    dispatch(getComments(comments));
+    let comments = await MicroBlogAPI.getComments(postId);
+    dispatch(getComments(postId, comments));
   };
 }
 
-function getComments(comments) {
+function getComments(postId, comments) {
   return {
     type: GET_COMMENTS,
+    postId,
     comments
   }
 }
 
 // Create Comment Thunk
-export function CreateCommentAPI(postId, comment) {
+export function createCommentAPI(postId, comment) {
   return async function(dispatch) {
     let newComment = await MicroBlogAPI.createComment(postId, comment);
     dispatch(createComment(postId, newComment));
@@ -117,7 +124,7 @@ function createComment(postId, comment) {
 // Delete Comment Thunk
 export function deleteCommentAPI(postId, commentId) {
   return async function(dispatch) {
-    let result = await MicroBlogAPI.deleteComment(postId, commentId);
+    await MicroBlogAPI.deleteComment(postId, commentId);
     dispatch(deleteComment(postId, commentId));
   };
 }
@@ -130,3 +137,14 @@ function deleteComment(postId, commentId) {
   }
 }
 
+
+
+
+
+export function startLoad() {
+  return { type: START_LOAD };
+}
+
+export function endLoad() {
+  return { type: END_LOAD };
+}

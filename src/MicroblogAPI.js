@@ -1,12 +1,10 @@
 import axios from 'axios';
-const BASE_URL = 'localhost:5000/api/posts';
+const BASE_URL = 'http://localhost:5000/api/posts';
 
 class MicroBlogAPI {
   static async getTitles() {
     try {
-      const results = await axios.get(
-        `${BASE_URL}`
-      );
+      const results = await axios.get(BASE_URL);
       return results.data;
     } catch (err) {
       return err;

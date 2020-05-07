@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { v4 as uuid } from 'uuid';
 
 /** Displays a form to add a new comment to a post
  * 
@@ -20,8 +19,7 @@ function CommentForm({ addComment }) {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    const commentId = uuid();
-    addComment(commentId, message);
+    addComment(message);
     setMessage('');
   }
 

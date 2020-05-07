@@ -4,20 +4,19 @@ import {
   ADD_POST,
   EDIT_POST,
   DELETE_POST,
-  GET_COMMENT,
+  GET_COMMENTS,
   ADD_COMMENT,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  START_LOAD,
+  END_LOAD
 } from './actionTypes';
 
-const INITIAL_STATE = { 
-  posts: {
-
-  },
-  titles: [
-
-  ]
+const INITIAL_STATE = {
+  posts: {},
+  titles: [],
+  isLoading: true
 }
-  
+
 /*
  redux structure for backend integration:
 
@@ -40,8 +39,6 @@ const INITIAL_STATE = {
 */
 
 function rootReducer(state = INITIAL_STATE, action) {
-  const post = state[action.post];
-  
   switch (action.type) {
     case GET_TITLES:
       return {
@@ -54,7 +51,7 @@ function rootReducer(state = INITIAL_STATE, action) {
         ...state,
         posts: {
           ...state.posts,
-          [action.post.id]: action.post 
+          [action.post.id]: action.post
         }
       };
 
@@ -75,46 +72,69 @@ function rootReducer(state = INITIAL_STATE, action) {
           [action.post.id]: {
             ...state.posts[action.post.id],
             ...action.post
+          }
         }
       }
-    }
-
-    // TERRY! START EDITING REDUCER HERE
 
     case DELETE_POST:
-      const postsCopy = { ...state };
+      const postsCopy = { ...state.posts };
       delete postsCopy[action.postId];
-      return postsCopy;
-
-    case GET_COMMENT:
-      return ;
-
-
-    case ADD_COMMENT:
-
-      const newPostCopy = { ...post };
-      newPostCopy.comments = { 
-        ...newPostCopy.comments, 
-        [action.commentId]: action.newComment 
-      };
-
       return {
         ...state,
-        [action.postId]: newPostCopy
+        posts: postsCopy
+      }
+
+    case GET_COMMENTS:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [action.postId]: {
+            ...state.posts[action.postId],
+            comments: action.comments
+          }
+        }
+      };
+
+    case ADD_COMMENT:
+      const updatedPost = state.posts[action.postId];
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [action.postId]: {
+            ...updatedPost,
+            comments: [...updatedPost.comments, action.comment]
+          }
+        }
       }
 
     case DELETE_COMMENT:
-      
-      const postCopy = { ...post };
-      postCopy.comments = { ...postCopy.comments };
-      delete postCopy.comments[action.commentId];
+      const postCopy = { ...state.posts[action.postId] };
+      postCopy.comments = postCopy.comments.filter(c => c.id !== action.commentId);
 
       return {
         ...state,
-        [action.postId]: postCopy
+        posts: {
+          ...state.posts,
+          [action.postId]: postCopy
+        }
       };
 
-      
+
+
+    case START_LOAD:
+      return {
+        ...state,
+        isLoading: true
+      }
+
+    case END_LOAD:
+      return {
+        ...state,
+        isLoading: false
+      }
+
     default:
       return state;
   }

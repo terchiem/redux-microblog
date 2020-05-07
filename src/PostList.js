@@ -1,5 +1,6 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getTitlesAPI } from './actions';
 import './PostList.css';
 
 import PostListItem from './PostListItem';
@@ -12,13 +13,22 @@ import PostListItem from './PostListItem';
 
 function PostList() {
 
-  const posts = useSelector(st => st.titles);
+  const dispatch = useDispatch();
+  const titles = useSelector(st => st.titles);
+
+  useEffect(() => {
+    dispatch(getTitlesAPI());
+  }, [dispatch]);
 
   function renderPostListItems() {
-    return Object.keys(posts).map(id => {
-      const { title, description } = posts[id];
-      return <PostListItem key={id} id={id} title={title} description={description} />
-    });
+    return titles.map(t => ( 
+      <PostListItem 
+        key={t.id} 
+        id={t.id} 
+        title={t.title} 
+        description={t.description} 
+      />
+    ));
   }
 
   return (
