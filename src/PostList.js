@@ -4,11 +4,11 @@ import './PostList.css';
 
 import PostListItem from './PostListItem';
 
-/** Displays a list of posts as PostListItem components
+/** Displays a list of posts as PostListItem components 
  * 
- * Props:
- *    posts -> array of posts from parent state
- */
+ * Redux:
+ *    posts -> main posts object
+*/
 
 function PostList() {
 

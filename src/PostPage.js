@@ -9,13 +9,14 @@ import CommentList from './CommentList';
 
 /** Displays information about a post and provides a way to edit and delete it
  * 
- * Props:
- *    posts -> array of posts from App state
- *    editPost -> state setter from App component
- *    deletePost -> state setter from App component
- * 
  * State:
  *    editMode -> toggles the display of the PostForm component
+ * 
+ * Redux:
+ *    posts -> main posts object
+ * 
+ * Dispatch:
+ *    deletePost
 */
 
 function PostPage() {
@@ -27,7 +28,7 @@ function PostPage() {
 
   // redirect to home if post not found
   const post = posts[id];
-  if (!post) return <Redirect to="/" />;
+  if (!post) { return <Redirect to="/" />; }
 
   const { title, description, body, comments } = post;
 

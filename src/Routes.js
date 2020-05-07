@@ -5,14 +5,7 @@ import PostList from './PostList';
 import PostPage from './PostPage';
 import PostForm from './PostForm';
 
-/** Main routes for Microblog App 
- * 
- * Props:
- *  posts -> array of posts from App state
- *  addPost -> App state setter used in NewPostForm
- *  editPost -> App state setter used in PostPage -> EditPostForm
- *  deletePost -> App state setter used in PostPage -> EditPostForm
-*/
+/** Main routes for Microblog App */
 
 function Routes() {
 

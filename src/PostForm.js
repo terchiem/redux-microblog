@@ -7,13 +7,15 @@ import { v4 as uuid } from 'uuid';
 /** Displays a form to create a new post
  * 
  * Props:
- *    submitData -> parent state setter function
  *    id -> post id (if editing post)
  *    formData -> form data to populate the form (if editing post)
  *    toggleEditMode -> PostPage state setter function to toggle edit form
  * 
  * State:
  *    form -> input data
+ * 
+ * Dispatches:
+ *    editPost, addPost
  */
 
 const INITIAL_STATE = {
@@ -30,8 +32,6 @@ function PostForm({ id, formData = INITIAL_STATE, toggleEditMode }) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-
-    
 
     // if we are editing, we have an existing id
     if (id) {

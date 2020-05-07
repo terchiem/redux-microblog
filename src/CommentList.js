@@ -6,6 +6,16 @@ import CommentForm from './CommentForm';
 import Comment from './Comment';
 import './CommentList.css'
 
+/** Displays a list of Comment components from a post's comments object 
+ * 
+ * Props:
+ *    postId -> post id of comment's list
+ *    comments -> a post's list of comments collected in an object
+ * 
+ * Dispatch:
+ *    addComment, deleteComment
+*/
+
 function CommentList({ postId, comments }) {
 
   const dispatch = useDispatch();

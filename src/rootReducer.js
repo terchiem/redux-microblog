@@ -27,32 +27,47 @@ const INITIAL_STATE = {
       2: "another comment here!"
     }
   }
-
 }
   
+/*
+ redux structure for backend integration:
+
+ {
+   posts: { post pages we have visted }
+   title: { id,title,description,votes received from backend }
+ }
+
+
+ - adding a new post will add it into titles
+ - removing a post will remove it from titles
+ - editing a post will edit it from titles
+ - adding/removing a comment will update the post in posts
+*/
 
 function rootReducer(state = INITIAL_STATE, action) {
+  const post = state[action.postId];
+  
   switch (action.type) {
     case ADD_POST:
       return {
         ...state,
-        [action.newId]: action.newPost
+        [action.postId]: action.post
       }
 
     case EDIT_POST:
       return {
         ...state,
-        [action.editId]: action.postData
+        [action.postId]: {...post, ...action.post}
       }
 
     case DELETE_POST:
       const postsCopy = { ...state };
-      delete postsCopy[action.deleteId];
+      delete postsCopy[action.postId];
       return postsCopy;
 
     case ADD_COMMENT:
 
-      const newPostCopy = { ...state[action.postId] };
+      const newPostCopy = { ...post };
       newPostCopy.comments = { 
         ...newPostCopy.comments, 
         [action.commentId]: action.newComment 
@@ -65,7 +80,7 @@ function rootReducer(state = INITIAL_STATE, action) {
 
     case DELETE_COMMENT:
       
-      const postCopy = { ...state[action.postId] };
+      const postCopy = { ...post };
       postCopy.comments = { ...postCopy.comments };
       delete postCopy.comments[action.commentId];
 
@@ -81,55 +96,3 @@ function rootReducer(state = INITIAL_STATE, action) {
 }
 
 export default rootReducer;
-
-
-/* 
-
-  function addPost(newPost) {
-    setPosts(posts => ([...posts, newPost]));
-  }
-
-  function editPost(editedPost) {
-    setPosts(posts => {
-      const oldPosts = posts.filter(p => p.id !== editedPost.id);
-      return [...oldPosts, editedPost];
-    })
-  }
-
-  function deletePost(id) {
-    setPosts(posts => posts.filter(p => p.id !== id));
-  }
-
-  function addComment(postId, newComment) {
-    setPosts(posts => {
-      const editedPost = posts.find(post => post.id === postId);
-      const oldPosts = posts.filter(p => p.id !== editedPost.id);
-      return [
-        ...oldPosts,
-        {
-          ...editedPost,
-          comments: [
-            ...editedPost.comments,
-            newComment
-          ]
-        }
-      ]
-    })
-  }
-
-  function deleteComment(postId, commentId) {
-    setPosts(posts => {
-      const editedPost = posts.find(post => post.id === postId);
-      const editedComments = editedPost.comments.filter(c => c.id !== commentId);
-      return [
-        ...posts.filter(p => p.id !== postId),
-        {
-          ...editedPost,
-          comments: editedComments
-        }
-      ]
-    });
-    
-  }
-
-*/

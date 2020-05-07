@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
+/** Displays a form to add a new comment to a post
+ * 
+ * Props:
+ *    addComment -> parent function that dispatches addComment action
+ * 
+ * State:
+ *    message -> current input data
+ */
+
 function CommentForm({ addComment }) {
 
   const [message, setMessage ] = useState('')

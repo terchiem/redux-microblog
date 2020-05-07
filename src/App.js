@@ -5,11 +5,7 @@ import './App.css';
 import Header from './Header';
 import Routes from './Routes';
 
-/** Microblog app, allows a user to create and comment on a collection of posts 
- * 
- * State:
- *    posts -> array of post objects
-*/
+/** Microblog app, allows a user to create and comment on a collection of posts */
 function App() {
 
   return (
@@ -26,12 +22,6 @@ export default App;
 
 
 /*
-
-
-TODO: Refactor action payloads
-TODO: Refactor docstrings!!!
-
-
 {
   unique-key: {
     id:
