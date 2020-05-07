@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import './PostList.css';
 
 import PostListItem from './PostListItem';
@@ -9,12 +10,15 @@ import PostListItem from './PostListItem';
  *    posts -> array of posts from parent state
  */
 
-function PostList({ posts }) {
+function PostList() {
+
+  const posts = useSelector(st => st);
 
   function renderPostListItems() {
-    return posts.map(p => (
-      <PostListItem key={p.id} id={p.id} title={p.title} description={p.description} />
-    ))
+    return Object.keys(posts).map(id => {
+      const { title, description } = posts[id];
+      return <PostListItem key={id} id={id} title={title} description={description} />
+    });
   }
 
   return (

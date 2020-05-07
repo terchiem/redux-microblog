@@ -1,23 +1,28 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { addComment, deleteComment } from './actions';
 
 import CommentForm from './CommentForm';
 import Comment from './Comment';
 import './CommentList.css'
 
-function CommentList({ postId, addComment, deleteComment, comments }) {
+function CommentList({ postId, comments }) {
+
+  const dispatch = useDispatch();
 
   function removeComment(commentId) {
-    deleteComment(postId, commentId);
+    dispatch(deleteComment(postId, commentId));
   }
 
-  function addNewComment(newComment) {
-    addComment(postId, newComment);
+  function addNewComment(commentId, newComment) {
+    dispatch(addComment(postId, commentId, newComment));
   }
 
   function renderComments() {
-    return comments.map(c => (
-      <Comment message={c.message} removeComment={removeComment} id={c.id} key={c.id} />
-    ))
+    return Object.keys(comments).map(id => {
+      const message = comments[id];
+      return <Comment message={message} removeComment={removeComment} id={id} key={id} />
+    });
   }
 
   return (

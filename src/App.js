@@ -28,6 +28,10 @@ export default App;
 /*
 
 
+TODO: Refactor action payloads
+TODO: Refactor docstrings!!!
+
+
 {
   unique-key: {
     id:

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { deletePost } from './actions';
 
 import PostForm from './PostForm';
 import CommentList from './CommentList';
@@ -16,12 +18,15 @@ import CommentList from './CommentList';
  *    editMode -> toggles the display of the PostForm component
 */
 
-function PostPage({ posts, editPost, deletePost, addComment, deleteComment }) {
+function PostPage() {
 
+  const dispatch = useDispatch();
   const { id } = useParams();
+  const posts = useSelector(st => st);
   const [editMode, setEditMode] = useState(false);
 
-  const post = posts.find(p => p.id === id);
+  // redirect to home if post not found
+  const post = posts[id];
   if (!post) return <Redirect to="/" />;
 
   const { title, description, body, comments } = post;
@@ -31,7 +36,6 @@ function PostPage({ posts, editPost, deletePost, addComment, deleteComment }) {
         id={id} 
         formData={post} 
         toggleEditMode={toggleEditMode} 
-        submitData={editPost} 
       /> 
     : (<div>
         <h3>{title}</h3>
@@ -43,16 +47,15 @@ function PostPage({ posts, editPost, deletePost, addComment, deleteComment }) {
     setEditMode(edit => !edit);
   }
 
-
   return (
     <div className="PostPage">
       <div>
         <button onClick={toggleEditMode}>Edit</button>
-        <button onClick={() => deletePost(id)}>Delete</button>
+        <button onClick={() => dispatch(deletePost(id))}>Delete</button>
       </div>
       {postBody}
       <hr />
-      <CommentList postId={id} comments={comments} addComment={addComment} deleteComment={deleteComment} />
+      <CommentList postId={id} comments={comments} />
     </div>
   )
 }

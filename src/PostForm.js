@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addPost, editPost } from './actions';
 import { v4 as uuid } from 'uuid';
 
 /** Displays a form to create a new post
@@ -20,19 +22,31 @@ const INITIAL_STATE = {
   body: ""
 }
 
-function PostForm({ id, formData = INITIAL_STATE, toggleEditMode, submitData }) {
+function PostForm({ id, formData = INITIAL_STATE, toggleEditMode }) {
 
+  const dispatch = useDispatch();
   const history = useHistory();
   const [form, setForm] = useState(formData);
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    newPostId = id | uuid();
-    // convert to use action creator/dispatch
-    submitData(form, newPostId);
-    // if we are editing a post take us back to that post,
-    // otherwise redirect to home
-    id ? toggleEditMode() : history.push('/');
+
+    
+
+    // if we are editing, we have an existing id
+    if (id) {
+      dispatch(editPost(form, id));
+      toggleEditMode();
+    } else {
+      const newPost = {
+        ...form,
+        comments: {},
+        votes: 0
+      }
+      const newId = uuid();
+      dispatch(addPost(newPost, newId));
+      history.push('/');
+    }
   }
 
   function handleChange(evt) {

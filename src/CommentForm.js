@@ -11,11 +11,8 @@ function CommentForm({ addComment }) {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    const newMessage = {
-      message,
-      id: uuid()
-    }
-    addComment(newMessage);
+    const commentId = uuid();
+    addComment(commentId, message);
     setMessage('');
   }
 

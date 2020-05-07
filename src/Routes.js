@@ -14,27 +14,21 @@ import PostForm from './PostForm';
  *  deletePost -> App state setter used in PostPage -> EditPostForm
 */
 
-function Routes({ posts, addPost, editPost, deletePost, addComment, deleteComment }) {
+function Routes() {
 
   return (
     <Switch>
 
       <Route exact path="/">
-        <PostList posts={posts} />
+        <PostList />
       </Route>
 
       <Route exact path="/new">
-        <PostForm submitData={addPost} />
+        <PostForm />
       </Route>
 
       <Route path="/:id">
-        <PostPage
-          posts={posts} 
-          editPost={editPost}
-          deletePost={deletePost}
-          deleteComment={deleteComment}
-          addComment={addComment}
-        />
+        <PostPage />
       </Route>
 
       <Redirect to="/" />

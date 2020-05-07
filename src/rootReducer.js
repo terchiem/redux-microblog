@@ -7,81 +7,74 @@ import {
 } from './actionTypes';
 
 const INITIAL_STATE = { 
-  posts: {
-    1: {
-      title: "test post 1",
-      description: "test description 1",
-      body: "test body 1",
-      votes: 0,
-      comments: {
-        1: "this is a comment",
-        2: "another comment here!"
-        }
-    },
-    2: {
-      title: "test post 2",
-      description: "test description 2",
-      body: "test body 2",
-      votes: 0,
-      comments: {
-        1: "this is a comment",
-        2: "another comment here!"
+  1: {
+    title: "test post 1",
+    description: "test description 1",
+    body: "test body 1",
+    votes: 0,
+    comments: {
+      1: "this is a comment",
+      2: "another comment here!"
       }
+  },
+  2: {
+    title: "test post 2",
+    description: "test description 2",
+    body: "test body 2",
+    votes: 0,
+    comments: {
+      1: "this is a comment",
+      2: "another comment here!"
     }
   }
-  }
+
+}
   
-  // TODO: DO CHANGES ON FORM SUBMISSION SIDE
 
 function rootReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case ADD_POST:
       return {
         ...state,
-        posts: {
-          ...state.posts,
-          [action.newId]: action.newPost
-        }
+        [action.newId]: action.newPost
       }
 
     case EDIT_POST:
-      // const editedPost = store.posts[action.editId]
       return {
         ...state,
-        posts: {
-          ...state.posts,
-          [action.editId]: action.postData
-        }
+        [action.editId]: action.postData
       }
 
     case DELETE_POST:
-      const postsCopy = {...state.posts};
+      const postsCopy = { ...state };
       delete postsCopy[action.deleteId];
-      return {
-        ...state,
-        posts: postsCopy
-      }
+      return postsCopy;
 
     case ADD_COMMENT:
-      const postsDuplicate = { ...state.posts };
-      const commentsDuplicate = { ...postsDuplicate[action.postId].comments }
+
+      const newPostCopy = { ...state[action.postId] };
+      newPostCopy.comments = { 
+        ...newPostCopy.comments, 
+        [action.commentId]: action.newComment 
+      };
+
       return {
         ...state,
-        posts: {
-          ...postsDuplicate,
-          [action.postId]: {
-            ...[action.postId],
-            commentsDuplicate: {
-              ...[commentsDuplicate],
-              [action.commentId]: action.newComment
-            }
-          }
-        }
+        [action.postId]: newPostCopy
       }
 
     case DELETE_COMMENT:
-      return ;
+      
+      const postCopy = { ...state[action.postId] };
+      postCopy.comments = { ...postCopy.comments };
+      delete postCopy.comments[action.commentId];
 
+      return {
+        ...state,
+        [action.postId]: postCopy
+      };
+
+      
     default:
       return state;
   }

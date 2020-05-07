@@ -6,11 +6,11 @@ import {
   DELETE_COMMENT
 } from './actionTypes';
 
-export function addPost(newPost, id) {
+export function addPost(newPost, newId) {
   return {
     type: ADD_POST,
     newPost,
-    id
+    newId
   }
 }
 
