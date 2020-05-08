@@ -1,0 +1,17 @@
+.votesContainer {
+  padding: 10px;
+  background-color: #F5F5F5;
+  border-radius: 4px;
+  max-width: 100px;
+  margin: 10px auto;
+}
+
+.up {
+  color: forestgreen;
+  margin-left: 4px;
+}
+
+.down {
+  color: maroon;
+  margin-right: 4px;
+}

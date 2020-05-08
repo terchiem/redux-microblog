@@ -7,8 +7,7 @@ import {
   GET_COMMENTS,
   ADD_COMMENT,
   DELETE_COMMENT,
-  START_LOAD,
-  END_LOAD
+  CHANGE_VOTE
 } from './actionTypes';
 
 const INITIAL_STATE = {
@@ -40,10 +39,15 @@ const INITIAL_STATE = {
 
 function rootReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
+
     case GET_TITLES:
+      action.titles.sort((a,b) => b.votes - a.votes);
+
       return {
         ...state,
-        titles: action.titles
+        titles: [
+          ...action.titles
+        ]
       };
 
     case GET_POST:
@@ -51,46 +55,62 @@ function rootReducer(state = INITIAL_STATE, action) {
         ...state,
         posts: {
           ...state.posts,
-          [action.post.id]: action.post
-        }
-      };
-
-    case ADD_POST:
-      return {
-        ...state,
-        posts: {
-          ...state.posts,
-          [action.post.id]: action.post
-        },
-        titles: [
-          ...state.titles,
-          {
-            id: action.post.id,
-            title: action.post.title,
-            description: action.post.description,
-            votes: action.post.votes,
-          }
-        ]
-      }
-
-    case EDIT_POST:
-      return {
-        ...state,
-        posts: {
-          ...state.posts,
           [action.post.id]: {
-            ...state.posts[action.post.id],
             ...action.post
           }
         }
-      }
+      };
+
+      case ADD_POST:
+        return {
+          ...state,
+          posts: {
+            ...state.posts,
+            [action.post.id]: {
+              ...action.post,
+              comments: []
+            }
+          },
+          titles: [
+            ...state.titles,
+            {
+              id: action.post.id,
+              title: action.post.title,
+              description: action.post.description,
+              votes: action.post.votes,
+            }
+          ]
+        }
+  
+      case EDIT_POST:
+        const titlesToEdit = [...state.titles];
+        let editedTitle = titlesToEdit.find(t => t.id === action.post.id);
+
+        editedTitle.title = action.post.title;
+        editedTitle.description = action.post.description;
+        editedTitle.votes = action.post.votes;
+
+        return {
+          ...state,
+          posts: {
+            ...state.posts,
+            [action.post.id]: {
+              ...state.posts[action.post.id],
+              ...action.post
+            }
+          },
+          titles: titlesToEdit
+        }
 
     case DELETE_POST:
       const postsCopy = { ...state.posts };
       delete postsCopy[action.postId];
+      const filteredTitles = state.titles.filter(t => t.id !== action.postId )
+
       return {
         ...state,
-        posts: postsCopy
+        posts: postsCopy,
+        titles: filteredTitles
       }
 
     case GET_COMMENTS:
@@ -130,19 +150,37 @@ function rootReducer(state = INITIAL_STATE, action) {
         }
       };
 
+      case CHANGE_VOTE:
+        // console.log("CHANGE VOTE REDUCER - votes:", action.votes, "POSTID:", action.postId)
+        const titlesCopy = [...state.titles];
+        // console.log("TITLES COPY", titlesCopy)
+        const newTitle = titlesCopy.find(t => t.id === action.postId);
+        // console.log("NEW TITLE", newTitle);
+        newTitle.votes = action.votes;
+        titlesCopy.sort((a,b) => b.votes - a.votes);
+        return {
+          ...state,
+          posts: {
+            ...state.posts,
+            [action.postId]: {
+              ...state.posts[action.postId],
+              votes: action.votes
+            }
+          },
+          titles: titlesCopy
+        }
 
+    // case START_LOAD:
+    //   return {
+    //     ...state,
+    //     isLoading: true
+    //   }
 
-    case START_LOAD:
-      return {
-        ...state,
-        isLoading: true
-      }
-
-    case END_LOAD:
-      return {
-        ...state,
-        isLoading: false
-      }
+    // case END_LOAD:
+    //   return {
+    //     ...state,
+    //     isLoading: false
+    //   }
 
     default:
       return state;

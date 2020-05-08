@@ -1,32 +1,30 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getTitlesAPI } from './actions';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import './PostList.css';
 
 import PostListItem from './PostListItem';
 
-/** Displays a list of posts as PostListItem components 
+/** Displays a list of titles as PostListItem components 
  * 
  * Redux:
- *    posts -> main posts object
+ *    titles -> title objects representing each post
 */
 
 function PostList() {
 
-  const dispatch = useDispatch();
   const titles = useSelector(st => st.titles);
 
-  useEffect(() => {
-    dispatch(getTitlesAPI());
-  }, [dispatch]);
-
   function renderPostListItems() {
+
+    console.log("RENDERED THE LIST!")
+
     return titles.map(t => ( 
       <PostListItem 
         key={t.id} 
         id={t.id} 
         title={t.title} 
-        description={t.description} 
+        description={t.description}
+        votes={t.votes}
       />
     ));
   }

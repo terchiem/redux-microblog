@@ -38,7 +38,7 @@ function PostForm({ id, formData = INITIAL_STATE, toggleEditMode }) {
       toggleEditMode();
     } else {
       dispatch(addPostAPI(form));
-      history.push('/');
+      history.push('/'); // take user away from page that was just deleted
     }
   }
 

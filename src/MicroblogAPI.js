@@ -102,6 +102,20 @@ class MicroBlogAPI {
     }
   }
 
+  // Change vote on a post
+  static async changeVote(postId, direction) {
+    try {
+      const result = await axios.post(
+        `${BASE_URL}/${postId}/vote/${direction}`,
+      );
+      return result.data.votes;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+
+
 }
 
 export default MicroBlogAPI;

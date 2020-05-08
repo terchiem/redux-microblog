@@ -8,7 +8,8 @@ import {
   ADD_COMMENT,
   DELETE_COMMENT,
   START_LOAD,
-  END_LOAD
+  END_LOAD,
+  CHANGE_VOTE
 } from './actionTypes';
 import MicroBlogAPI from './MicroblogAPI';
 
@@ -134,6 +135,22 @@ function deleteComment(postId, commentId) {
     type: DELETE_COMMENT,
     postId,
     commentId
+  }
+}
+
+// Change Vote Thunk
+export function changeVoteAPI(postId, direction) {
+  return async function(dispatch) {
+    let votes = await MicroBlogAPI.changeVote(postId, direction);
+    dispatch(changeVote(parseInt(postId), votes));
+  };
+}
+
+function changeVote(postId, votes) {
+  return {
+    type: CHANGE_VOTE,
+    postId,
+    votes
   }
 }
 

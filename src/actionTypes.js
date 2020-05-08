@@ -8,3 +8,4 @@ export const ADD_COMMENT = "ADD_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 export const START_LOAD = "START_LOAD";
 export const END_LOAD = "END_LOAD";
+export const CHANGE_VOTE = "CHANGE_VOTE";

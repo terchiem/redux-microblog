@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Redirect } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { getPostAPI, deletePostAPI, startLoad, endLoad } from './actions';
+import { getPostAPI, deletePostAPI } from './actions';
 
 import PostForm from './PostForm';
 import CommentList from './CommentList';
+import Votes from './Votes';
 
 
 /** Displays information about a post and provides a way to edit and delete it
@@ -28,9 +29,11 @@ function PostPage() {
   const [editMode, setEditMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const history = useHistory();
+
 
   useEffect(() => {
-    if (!post) {
+    if (!post || !post.id) {
       dispatch(getPostAPI(id));
     }else {
       setIsLoading(false);
@@ -43,10 +46,10 @@ function PostPage() {
 
   /*****************************************************************************************
   * 		ASK ABOUT: Async redirect if page not found		
-  // if (!post) { return <Redirect to="/" />; }
   *****************************************************************************************/
+ // if (!post) { return <Redirect to="/" />; }
 
-  const { title, description, body, comments } = post;
+  const { title, description, body, comments, votes } = post;
 
   const postBody = editMode 
     ? <PostForm 
@@ -64,12 +67,18 @@ function PostPage() {
     setEditMode(edit => !edit);
   }
 
+  async function deletePost(id) {
+    dispatch(deletePostAPI(id));
+    history.push('/');
+  }
+
   return (
     <div className="PostPage">
       <div>
         <button onClick={toggleEditMode}>Edit</button>
-        <button onClick={() => dispatch(deletePostAPI(id))}>Delete</button>
+        <button onClick={() => deletePost(parseInt(id))}>Delete</button>
       </div>
+      <div><Votes voteCount={votes} postId={id} /></div>
       {postBody}
       <hr />
       <CommentList postId={id} comments={comments} />
