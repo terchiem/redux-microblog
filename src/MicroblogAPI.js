@@ -7,7 +7,7 @@ class MicroBlogAPI {
       const results = await axios.get(BASE_URL);
       return results.data;
     } catch (err) {
-      return err;
+      console.error(err);
     }
   }
 
@@ -17,9 +17,12 @@ class MicroBlogAPI {
       const results = await axios.get(
         `${BASE_URL}/${postId}`
       );
+      if ( !results.data ) { 
+        console.log()
+        throw new Error("404 Not found.")}
       return results.data;
     } catch (err) {
-      return err;
+      console.error(err);
     }
   }
     
@@ -27,25 +30,27 @@ class MicroBlogAPI {
   static async createPost(post) {
     try {
       const results = await axios.post(
-        `${BASE_URL}}`,
+        `${BASE_URL}`,
         post
-      );
+        );
+      console.log("\n \n RESULTS AFTER POST REQUEST\n", results);
       return results.data;
     } catch (err) {
-      return err;
+      console.error(err);
     }
   }
   
   // edit a post
-  static async editPost(post, postId) {
+  static async editPost(post) {
     try {
+      // console.log("\n\n\n POST!\n", post, "\n\nPOSTID\n", postId);
       const results = await axios.put(
-        `${BASE_URL}/${postId}`,
+        `${BASE_URL}/${post.id}`,
         post
       );
       return results.data;
     } catch (err) {
-      return err;
+      console.error(err);
     }
   }
 
@@ -57,7 +62,7 @@ class MicroBlogAPI {
       );
       return results.data;
     } catch (err) {
-      return err;
+      console.error(err);
     }
   }
 
@@ -69,7 +74,7 @@ class MicroBlogAPI {
       );
       return results.data;
     } catch (err) {
-      return err;
+      console.error(err);
     }
   }
 
@@ -78,11 +83,11 @@ class MicroBlogAPI {
     try {
       const results = await axios.post(
         `${BASE_URL}/${postId}/comments`,
-        comment
+        {text: comment}
       );
       return results.data;
     } catch (err) {
-      return err;
+      console.error(err);
     }
   }
   // delete a comment
@@ -93,7 +98,7 @@ class MicroBlogAPI {
       );
       return results.data;
     } catch (err) {
-      return err;
+      console.error(err);
     }
   }
 

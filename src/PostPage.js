@@ -23,32 +23,28 @@ function PostPage() {
 
   const dispatch = useDispatch();
   const { id } = useParams();
-  const posts = useSelector(st => st.posts, shallowEqual);
-  const isLoading = useSelector(st => st.isLoading);
+  const post = useSelector(st => st.posts[id], shallowEqual);
+  // const isLoading = useSelector(st => st.isLoading);
   const [editMode, setEditMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
 
   useEffect(() => {
-    dispatch(startLoad());
-    dispatch(getPostAPI(id));
-  }, [dispatch, id]);
-
-  useEffect(() => {
-    if (posts[id]) {
-      dispatch(endLoad());
+    if (!post) {
+      dispatch(getPostAPI(id));
+    }else {
+      setIsLoading(false);
     }
-  }, [posts])
+  }, [post, dispatch, id]);
 
   if (isLoading) {
     return <div>Loading...</div>
   }
 
   /*****************************************************************************************
-  * 		TODO: Think about loading and redirecting when visiting a post			
+  * 		ASK ABOUT: Async redirect if page not found		
+  // if (!post) { return <Redirect to="/" />; }
   *****************************************************************************************/
-
-  const post = posts[id];
-  if (!post) { return <Redirect to="/" />; }
 
   const { title, description, body, comments } = post;
 

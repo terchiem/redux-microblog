@@ -61,7 +61,16 @@ function rootReducer(state = INITIAL_STATE, action) {
         posts: {
           ...state.posts,
           [action.post.id]: action.post
-        }
+        },
+        titles: [
+          ...state.titles,
+          {
+            id: action.post.id,
+            title: action.post.title,
+            description: action.post.description,
+            votes: action.post.votes,
+          }
+        ]
       }
 
     case EDIT_POST:

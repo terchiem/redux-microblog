@@ -20,7 +20,7 @@ function Routes() {
         <PostForm />
       </Route>
 
-      <Route path="/:id">
+      <Route exact path="/:id">
         <PostPage />
       </Route>
 
